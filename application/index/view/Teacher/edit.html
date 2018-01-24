@@ -1,42 +1,37 @@
-<!DOCTYPE html>
-<html lang="zh-hans">
+{extend name="edit" /} 
 
-<head>
-    <meta charset="UTF-8">
-    <title>编辑教师信息</title>
-    <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
-</head>
+{block name="title"} 
+{eq name="Teacher->id" value=""}添加教师{else /}编辑教师{/eq} 
+{/block} 
 
-<body class="container">
-	<h1>编辑教师信息</h1>
-    <div class="row">
-        <div class="col-md-12">
-        	<hr />
-			<form action="{:url('update')}" method="post" class="form-inline">
-				<div class="form-group">
-					<label>教师姓名:</label>
-					<input type="hidden" name="id" value="{$Teacher->getData('id')}" />
-					<input type="text" name="name" class="form-control" value="{$Teacher->getData('name')}" />
-				</div>
-				<div class="form-group">
-					<label>用户名:</label>
-					<input type="text" name="username" class="form-control" value="{$Teacher->getData('username')}">
-				</div>
-				<div class="form-group">
-					<label>性别:</label>
-					<select name="sex" class="form-control">
-						<option value="0">男</option>
-						<option value="1" {eq name="Teacher->getData('sex')" value="1"}selected="selected"{/eq}>女</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>邮箱:</label>
-					<input type="email" name="email" class="form-control" value="{$Teacher->getData('email')}" />
-				</div>
-				<button type="submit" class="btn btn-info">更新</button>
-			</form>
-        </div>
+{block name="h1"} 
+{eq name="Teacher->id" value=""}添加教师{else /}编辑教师{/eq} 
+{/block} 
+
+{block name="content"} 
+{php}$action = request()->action() === 'add' ? 'insert' : 'update';{/php}
+<form action="{:url($action)}" method="post" class="form-inline">
+    <div class="form-group">
+        <label>教师姓名:</label>
+        <input type="hidden" name="id" value="{$Teacher->getData('id')}" />
+        <input type="text" name="name" class="form-control" value="{$Teacher->getData('name')}" />
     </div>
-</body>
-
-</html>
+    <div class="form-group">
+        <label>用户名:</label>
+        {eq name="Teacher->username" value=""}
+        <input type="text" name="username" class="form-control" value="{$Teacher->username}" /> {else /}{$Teacher->username} {/eq}
+    </div>
+    <div class="form-group">
+        <label>性别:</label>
+        <select name="sex" class="form-control">
+            <option value="0">男</option>
+            <option value="1" {eq name="Teacher->getData('sex')" value="1" }selected="selected" {/eq}>女</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>邮箱:</label>
+        <input type="email" name="email" class="form-control" value="{$Teacher->getData('email')}" />
+    </div>
+    <button type="submit" class="btn btn-info">更新</button>
+</form>
+{/block}

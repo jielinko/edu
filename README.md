@@ -68,7 +68,13 @@ www  WEB部署目录（或者子目录）
 │   ├── route.php
 │   └── tags.php
 
-### 教师表密码生成算法
+~~~
+
+### 使用教师表任一用户登录
+
+如: zhangsan/123456
+
+>教师表密码生成算法
 
 ```
 sha1(md5($password).'salt');

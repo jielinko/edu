@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{block name="title"}标题{/block}</title>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+</head>
+
+<body class="container">
+    <h1>{block name="h1"}大标题{/block}</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <hr />
+            {block name="content"} 
+
+            {/block} 
+            <hr />
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{block name="title"}标题{/block}</title>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+</head>
+
+<body class="container">
+    <!-- 菜单导航 start-->
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-default" role="navigation">
+                <!-- container-fluid start -->
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a href="http://www.mengyunzhi.com" class="navbar-brand">梦云智</a>
+                    </div>
+                    <!-- toggle start -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="navbar-nav nav">
+                            <li class="active"><a href="{:url('Teacher/index')}">教师管理</a></li>
+                            <li><a href="{:url('Student/index')}">学生管理</a></li>
+                            <li><a href="{:url('Klass/index')}">班级管理</a></li>
+                            <li><a href="{:url('Course/index')}">课程管理</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="{:url('Login/logout')}">注销</a></li>      
+                        </ul>
+                    </div>
+                    <!-- toggle end -->
+                </div>
+                <!-- container-fluid end -->
+            </nav>
+        </div>
+    </div>
+    <!-- 菜单导航 end -->
+    <h1 class="text-center">{block name="h1"}大标题{/block}</h1>
+    <div class="row">
+        <div class="col-md-12">
+            {block name="search"}
+            <hr />
+            <div class="row">
+                <div class="col-md-8">
+                    <form class="form-inline" action="{:url()}">
+                        <div class="form-group">
+                            <label class="sr-only" for="name">姓名</label>
+                            <input name="name" type="text" class="form-control" placeholder="姓名..." value="{:input('get.name')}">
+                        </div>
+                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                    </form>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="{:url('add')}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>&nbsp;增加</a>
+                    <a href="{:url('Login/logout')}" class="btn btn-warning"><i class="glyphicon"></i>&nbsp;注销</a>
+                </div>
+            </div>
+            <hr /> 
+            {/block} 
+            {block name="content"} 
+
+            {/block} 
+            {block name="page"} 
+            
+            {/block}
+        </div>
+    </div>
+</body>
+
+</html>

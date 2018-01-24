@@ -8,7 +8,9 @@ use app\common\model\Teacher;
 
 class TeacherController extends IndexController
 {
-	// 教师信息管理主页
+	/**
+	 * 教师信息管理页面
+	 */
 	public function index()
 	{
 			// 获取查询信息
@@ -38,61 +40,67 @@ class TeacherController extends IndexController
 
 	}
 	
-	// 增加教师信息1 - 生成添加页面
+	/**
+	 * 增加教师信息1 - 生成添加页面
+	 */
 	public function add()
     {
-    	try {
-    		$htmls = $this->fetch();
-    		return $htmls;
-    	} catch (\Exception $e) {
-    		return '系统错误'.$e->getMessage();
-    	}
+	    // 实例化
+		$Teacher = new Teacher;
+
+		// 设置默认值
+		$Teacher->id = 0;
+		$Teacher->name = '';
+		$Teacher->username = '';
+		$Teacher->sex = 0;
+		$Teacher->email = '';
+		$this->assign('Teacher', $Teacher);
+
+		// 调用edit模板
+		return $this->fetch('edit');
     }
 
-    // 增加教师信息2 - 执行增加操作
+    /**
+     * 对数据进行保存或更新
+     * @param Teacher &$Teacher 教师 // 这使得验证和保存时的错误信息能够能过Teacher变量进行回传
+     * @return bool 
+     */
+    
+    private function saveTeacher(Teacher &$Teacher, $isUpdate = false)
+    {  
+		// 写入要更新的数据
+		$Teacher->name = Request::instance()->post('name');
+		if (!$isUpdate) {
+			$Teacher->username = $Teacher->username = Request::instance()->post('username');
+		}
+		$Teacher->sex = Request::instance()->post('sex/d');
+		$Teacher->email = Request::instance()->post('email');
+    	
+    	// 更新或保存
+    	return $Teacher->validate(true)->save($Teacher->getData());
+    }
+
+    /**
+     * 增加教师信息2 - 执行增加操作
+     */
 	public function insert()
     {
-    	$message = ''; //提示信息
 
-    	try {
-	    	// 接收传入数据
-	        $postData = Request::instance()->post();    
-
-	        // 实例化Teacher空对象
-	        $Teacher = new Teacher();
+	    // 实例化Teacher空对象
+	    $Teacher = new Teacher();
 	        
-	        // 为对象赋值
-	        $Teacher->name = $postData['name'];
-	        $Teacher->username = $postData['username'];
-	        $Teacher->sex = $postData['sex'];
-	        $Teacher->email = $postData['email'];
-	        
-	        // 新增教师对象至数据表
-	        $result = $Teacher->validate(true)->save($Teacher->getData());
+	    // 新增数据
+	    if (!$this->saveTeacher($Teacher)) {
+	    	return $this->error('操作失败' . $Teacher->getError());
+	    }
 
-	        // 反馈结果
-	        if(false === $result)
-	        {	
-	        	// 验证未通过,发生错误
-	        	$message = '新增失败:'.$Teacher->getError();
-	        } else {
-	        	// 提示操作成功,并跳转至教师管理页面
-	        	return  $this->success('教师'.$Teacher->name.'新增成功.',url('index'));
-	        }
+		// 提示操作成功,并跳转至教师管理页面
+	    return  $this->success('教师'.$Teacher->name.'新增成功.', url('index'));
+	}
 
-	    // 获取到ThinkPHP的内置异常时，直接向上抛出，交给ThinkPHP处理
-    	} catch (\think\Exception\HttpResponseException $e) {
-    		throw $e;
-
-    	// 获取到正常的异常时，输出异常	
-    	} catch (\Exception $e) {
-    		return $e->getMessage();
-    	}
-
-    	return $this->error($message);
-    }
-
-    // 删除教师信息
+    /**
+     * 删除教师信息
+     */
     public function delete()
     {
     	try {
@@ -133,7 +141,9 @@ class TeacherController extends IndexController
 	    return $this->success('删除成功', url('index'));
     }
 
-    // 更新教师信息1 - 生成编辑页面
+    /**
+     * 更新教师信息1 - 生成编辑页面
+     */
     public function edit()
     {
     	try {
@@ -172,44 +182,31 @@ class TeacherController extends IndexController
 
     }
 
-    // 更新教师信息2 - 执行更新操作
+    /**
+     * 更新教师信息2 - 执行更新操作
+     */
     public function update()
     {
-    	try {
-	    	// 接收数据,获取要更新的关键词信息
-	    	$id = Request::instance()->post('id/d');
 
-	    	// 获取当前对象
-	    	$Teacher = Teacher::get($id);
+	    // 接收数据,获取要更新的关键词信息
+	    $id = Request::instance()->post('id/d');
+
+	    // 获取当前对象
+	    $Teacher = Teacher::get($id);
 	    	
-		    	if (!is_null($Teacher)) {
-		    		// 写入要更新的数据
-			    	$Teacher->name = Request::instance()->post('name');
-			    	$Teacher->username = Request::instance()->post('username');
-			    	$Teacher->sex = Request::instance()->post('sex/d');
-			    	$Teacher->email = Request::instance()->post('email');
+		if (!is_null($Teacher)) {
+			if (!$this->saveTeacher($Teacher, true)) {
+				return $this->error('操作失败' . $Teacher->getError());
+			}
+		} else {
+			return $this->error('当前操作的记录不存在');
+		}
 
-			    	// 更新
-			    	if (false === $Teacher->validate(true)->save($Teacher->getData()))
-			    	{
-			    		return $this->error('更新失败'.$Teacher->getError());
-			    	}
-		    	} else {
-		    		throw new \Exception("所更新的记录不存在", 1); // 调用PHP内置类时，需要在前面加上 \ 
-		    	} 
-
-	    	// 获取到ThinkPHP的内置异常时,直接向上抛出,交给ThinkPHP处理
-	    	} catch (\think\Exception\HttpResponseException $e) {
-	    		throw $e;
-
-	    	// 获取到正常的异常时,输出异常
-	    	} catch (\Exception $e) {
-	    		return $e->getMessage();
-	    	}
-
-	    // 成功跳转至index控制器
+		// 成功跳转至index控制器
 	    return $this->success('操作成功',url('index'));
     }
+
+
 
 
 }
