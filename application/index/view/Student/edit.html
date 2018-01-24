@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>编辑学生信息</title>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+</head>
+
+<body class="container">
+    <h1>编辑学生信息</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <hr />
+            <form action="{:url('update')}" method="post" class="form-inline">
+                <div class="form-group">
+                    <label>学生姓名:</label>
+                    <input type="hidden" name="id" value="{$Student->getData('id')}" />
+                    <input type="text" name="name" class="form-control" value="{$Student->getData('name')}" />
+                </div>
+                <div class="form-group">
+                    <label>学号:</label>
+                    <input type="text" name="num" class="form-control" value="{$Student->getData('num')}" />
+                </div>
+                <div class="form-group">
+                    <label>性别:</label>
+                    <input type="radio" name="sex" value="0" id="sex0" {eq name="Student->getData('sex')" value="0" }checked="checked" {/eq}/>
+                    <label for="sex0">男</label>
+                    <input type="radio" name="sex" value="1" id="sex1" {eq name="Student->getData('sex')" value="1" }checked="checked" {/eq}/>
+                    <label for="sex1">女</label>
+                </div>
+                <div class="form-group">
+                    <label>班级</label>
+                    <select name="klass_id" class="form-control">
+                        {volist name="Student->klass->all()" id="klass"}
+                        <option value="{$klass->id}" {eq name="klass->id" value="$Student->klass_id" }selected="selected" {/eq}>{$klass->name}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>邮箱:</label>
+                    <input type="email" name="email" class="form-control" value="{$Student->getData('email')}" />
+                </div>
+                <button type="submit" class="btn btn-info">更新</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
