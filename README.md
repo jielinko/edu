@@ -18,13 +18,14 @@ ThinkPHP 5.0入门实例教程
 
 ~~~
 www  WEB部署目录（或者子目录）
-
 ├── application
+│   ├── command.php
 │   ├── common
 │   │   ├── model
 │   │   │   ├── Course.php
 │   │   │   ├── Klass.php
 │   │   │   ├── KlassCourse.php
+│   │   │   ├── Msg.php
 │   │   │   ├── Student.php
 │   │   │   └── Teacher.php
 │   │   └── validate
@@ -33,6 +34,9 @@ www  WEB部署目录（或者子目录）
 │   │       ├── KlassCourse.php
 │   │       ├── Student.php
 │   │       └── Teacher.php
+│   ├── common.php
+│   ├── config.php
+│   ├── database.php
 │   ├── index
 │   │   ├── controller
 │   │   │   ├── CourseController.php
@@ -44,27 +48,21 @@ www  WEB部署目录（或者子目录）
 │   │   │   └── TestController.php
 │   │   └── view
 │   │       ├── Course
-│   │       │   ├── add.html
 │   │       │   ├── edit.html
 │   │       │   └── index.html
 │   │       ├── Klass
-│   │       │   ├── add.html
 │   │       │   ├── edit.html
 │   │       │   └── index.html
 │   │       ├── Login
 │   │       │   └── index.html
 │   │       ├── Student
-│   │       │   ├── add.html
 │   │       │   ├── edit.html
 │   │       │   └── index.html
-│   │       └── Teacher
-│   │           ├── add.html
-│   │           ├── edit.html
-│   │           └── index.html
-│   ├── command.php
-│ 	├── common.php
-│   ├── config.php
-│   ├── database.php
+│   │       ├── Teacher
+│   │       │   ├── edit.html
+│   │       │   └── index.html
+│   │       ├── edit.html
+│   │       └── index.html
 │   ├── route.php
 │   └── tags.php
 
@@ -72,7 +70,7 @@ www  WEB部署目录（或者子目录）
 
 ### 使用教师表任一用户登录
 
-如: zhangsan/123456
+如: zhangwu/123456
 
 >教师表密码生成算法
 
@@ -81,4 +79,24 @@ sha1(md5($password).'salt');
 
 “123456”->“5f67ea9991744a45432175cac508884ddc23b1c8”
 ```
+
+### 界面显示
+
+#### 教师管理界面
+![教师信息管理](http://jielinko-develop.oss-cn-shenzhen.aliyuncs.com/18-1-28/24990885.jpg)
+
+#### 学生管理界面
+![](http://jielinko-develop.oss-cn-shenzhen.aliyuncs.com/18-1-28/3962202.jpg)
+
+##### 编辑学生信息
+![](http://jielinko-develop.oss-cn-shenzhen.aliyuncs.com/18-1-28/84022892.jpg)
+
+#### 班级管理界面
+![](http://jielinko-develop.oss-cn-shenzhen.aliyuncs.com/18-1-28/71214732.jpg)
+
+#### 课程管理界面
+![](http://jielinko-develop.oss-cn-shenzhen.aliyuncs.com/18-1-28/2795409.jpg)
+
+##### 添加课程信息
+![](http://jielinko-develop.oss-cn-shenzhen.aliyuncs.com/18-1-28/44739943.jpg)
 
