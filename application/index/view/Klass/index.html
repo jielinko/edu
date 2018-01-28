@@ -1,55 +1,27 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-
-<head>
-    <meta charset="UTF-8">
-    <title>班级信息管理</title>
-    <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-</head>
-
-<body class="container">
-    <h1 class="text-center">班级信息管理</h1>
-    <div class="row">
-        <div class="col-md-12">
-            <hr />
-            <div class="row">
-                <div class="col-md-8">
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label class="sr-only" for="name">名称</label>
-                            <input name="name" type="text" class="form-control" placeholder="名称..." value="{:input('get.name')}">
-                        </div>
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
-                    </form>
-                </div>
-                <div class="col-md-4 text-right">
-                    <a href="{:url('add')}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>&nbsp;增加</a>
-                    <a href="{:url('Login/logout')}" class="btn btn-warning"><i class="glyphicon"></i>&nbsp;注销</a>
-                </div>
-            </div>
-            <hr />
-            <table class="table table-hover table-bordered">
-                <tr class="info">
-                    <th>序号</th>
-                    <th>名称</th>
-                    <th>辅导员</th>
-                    <th>操作</th>
-                </tr>
-                {volist name="klasses" id="_Klass" key="key"}
-                <tr>
-                    <td>{$key}</td>
-                    <td>{$_Klass->getData('name')}</td>
-                    <td>{$_Klass->teacher->name}</td>
-                    <td>
-                        <a class="btn btn-primary" href="{:url('edit?id=' . $_Klass->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
-                        <a class="btn btn-danger " href="{:url('delete?id=' . $_Klass->getData('id'))}"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>&nbsp;
-                    </td>
-                </tr>
-                {/volist}
-            </table>
-            {$klasses->render()}
-        </div>
-    </div>
-</body>
-
-</html>
+{extend name="index"/} 
+{block name="title"}班级信息管理{/block}
+{block name="h1"}班级信息管理{/block} 
+{block name="content"}
+<table class="table table-hover table-bordered">
+    <tr class="info">
+        <th>序号</th>
+        <th>名称</th>
+        <th>辅导员</th>
+        <th>操作</th>
+    </tr>
+    {volist name="klasses" id="_Klass" key="key"}
+    <tr>
+        <td>{$key}</td>
+        <td>{$_Klass->getData('name')}</td>
+        <td>{$_Klass->teacher->name}</td>
+        <td>
+            <a class="btn btn-primary" href="{:url('edit?id=' . $_Klass->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
+            <a class="btn btn-danger " href="{:url('delete?id=' . $_Klass->getData('id'))}"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>&nbsp;
+        </td>
+    </tr>
+    {/volist}
+</table>
+{/block}
+{block name="page"}
+{$klasses->render()}
+{/block}

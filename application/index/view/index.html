@@ -20,10 +20,10 @@
                     <!-- toggle start -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="navbar-nav nav">
-                            <li class="active"><a href="{:url('Teacher/index')}">教师管理</a></li>
-                            <li><a href="{:url('Student/index')}">学生管理</a></li>
-                            <li><a href="{:url('Klass/index')}">班级管理</a></li>
-                            <li><a href="{:url('Course/index')}">课程管理</a></li>
+                            <li class="teacher_nav"><a href="{:url('Teacher/index')}">教师管理</a></li>
+                            <li class="student_nav"><a href="{:url('Student/index')}">学生管理</a></li>
+                            <li class="klass_nav"><a href="{:url('Klass/index')}">班级管理</a></li>
+                            <li class="course_nav"><a href="{:url('Course/index')}">课程管理</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{:url('Login/logout')}">注销</a></li>      
@@ -45,8 +45,8 @@
                 <div class="col-md-8">
                     <form class="form-inline" action="{:url()}">
                         <div class="form-group">
-                            <label class="sr-only" for="name">姓名</label>
-                            <input name="name" type="text" class="form-control" placeholder="姓名..." value="{:input('get.name')}">
+                            <label class="sr-only" for="name">名称</label>
+                            <input name="name" type="text" class="form-control" placeholder="名称..." value="{:input('get.name')}">
                         </div>
                         <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
                     </form>

@@ -1,34 +1,20 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-
-<head>
-    <meta charset="UTF-8">
-    <title>编辑课程信息</title>
-    <link rel="stylesheet" type="text/css" href="/edu/public/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-</head>
-
-<body class="container">
-    <h1>编辑课程信息</h1>
-    <div class="row">
-        <div class="col-md-12">
-            <hr />
-            <form action="{:url('update')}" method="post" class="form-inline">
-                <div class="form-group">
-                    <input type="hidden" name="id" value="{$Course->getData('id')}" />
-                    <label for="name">课程名:</label>
-                    <input type="text" name="name" id="name" class="form-control" value="{$Course->name}" />
-                </div>
-                <div class="form-group">
-                    <label>班级选择:</label>
-                    {volist name="klasses" id="_Klass"}
-                    <input type="checkbox" name="klass_id[]" id="klass_id_{$_Klass->id}" value="{$_Klass->id}" {eq name="Course->getIsChecked($_Klass)" value="true"}checked="checked"{/eq}/>
-                    <label for="klass_id_{$_Klass->id}">{$_Klass->name}</label>
-                    {/volist}
-                </div>
-                <button type="submit" class="btn btn-info">更新</button>
-            </form>
-        </div>
+{extend name="edit" /} 
+{block name="title"} {eq name="Course->id" value=""}添加课程{else /}编辑课程{/eq} {/block} 
+{block name="h1"} {eq name="Course->id" value=""}添加课程{else /}编辑课程{/eq} {/block} 
+{block name="content"} {php}$action = request()->action() === 'add' ? 'insert' : 'update';{/php}
+<form action="{:url($action)}" method="post" class="form-inline">
+    <div class="form-group">
+        <input type="hidden" name="id" value="{$Course->getData('id')}" />
+        <label for="name">课程名:</label>
+        <input type="text" name="name" id="name" class="form-control" value="{$Course->name}" />
     </div>
-</body>
-
-</html>
+    <div class="form-group">
+        <label>班级选择:</label>
+        {volist name="klasses" id="_Klass"}
+        <input type="checkbox" name="klass_id[]" id="klass_id_{$_Klass->id}" value="{$_Klass->id}" {eq name="Course->getIsChecked($_Klass)" value="true" }checked="checked" {/eq}/>
+        <label for="klass_id_{$_Klass->id}">{$_Klass->name}</label>
+        {/volist}
+    </div>
+    <button type="submit" class="btn btn-info">保存</button>
+</form>
+{/block}

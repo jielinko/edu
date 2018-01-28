@@ -27,14 +27,45 @@ class StudentController extends IndexController
         return $this->fetch();
     }
 
+    private function saveStudent(Student &$Student, $isUpdate = false)
+    {
+        // 为对象赋值
+        $Student->name = input('post.name');
+        if (!$isUpdate) {
+            $Student->num = input('post.num');
+        }
+        $Student->sex = input('post.sex');
+        $Student->klass_id = input('post.klass_id');
+        $Student->email = input('post.email');
+
+        // 新增学生对象至数据表
+        return $Student->validate(true)->save($Student->getData()); 
+    }
+
     public function add()
     {
         try {
+            // 实例化
+            $Student = new Student;
+
+            $Student->id = 0;
+            $Student->name = '';
+            $Student->num = '';
+            $Student->email = '';
+            $Student->sex = 0;
+            $Student->email = '';
+            $Student->klass_id = 0;
+
+            $this->assign('Student', $Student);
+
             // 获取所有的班级信息
-            $klasses = Klass::all();
+            // $klasses = Klass::all();
+            $klasses = $Student->klass()->select();
+            // trace($klasses,'debug');   
+
             $this->assign('klasses', $klasses);
-            $htmls = $this->fetch();
-            return $htmls;
+            return $this->fetch('edit');
+
         } catch (\Exception $e) {
             return '系统错误'.$e->getMessage();
         }
@@ -45,24 +76,11 @@ class StudentController extends IndexController
         $message = '';
 
         try {
-            // 接收传入数据
-            $postData = Request::instance()->post();
-
             // 实例化Student空对象
             $Student = new Student();
 
-            // 为对象赋值
-            $Student->name = $postData['name'];
-            $Student->num = $postData['num'];
-            $Student->sex = $postData['sex'];
-            $Student->klass_id = $postData['klass_id'];
-            $Student->email = $postData['email'];
-
-            // 新增学生对象至数据表
-            $result = $Student->validate(true)->save($Student->getData());
-
-            // 反馈结果
-            if(false === $result)
+            // 新增数据
+            if(!$this->saveStudent($Student))
             {   
                 // 验证未通过,发生错误
                 $message = '新增失败:'.$Student->getError();
@@ -139,9 +157,12 @@ class StudentController extends IndexController
                 return $this->error('未找到ID为' . $id . '的记录');
             }
 
+            $klasses = $Student->klass()->select(); 
+
+            $this->assign('klasses', $klasses);
             $this->assign('Student', $Student);
 
-            return $this->fetch();
+            return $this->fetch('edit');
         
         // 获取到ThinkPHP的内置异常时,直接向上抛出,交给ThinkPHP处理    
         } catch (\think\Exception\HttpResponseException $e) {
@@ -162,17 +183,9 @@ class StudentController extends IndexController
                 $Student = Student::get($id);
 
                 if (!is_null($Student)) {
-                    $Student->name = Request::instance()->post('name');
-                    $Student->num = Request::instance()->post('num');
-                    $Student->sex = Request::instance()->post('sex/d');
-                    $Student->klass_id = Request::instance()->post('klass_id');
-                    $Student->email = Request::instance()->post('email');
-
-                    // 更新
-                    if (false === $Student->validate(true)->save($Student->getData())) 
-                    {
-                        return $this->error('更新失败'.$Student->getError());
-                    }
+                    if (!$this->saveStudent($Student, true)) {
+                        return $this->error('更新失败' . $Student->getError());
+                    } 
                 } else {
                     throw new \Exception("所更新的记录不存在", 1); // 调用PHP内置类时，需要在前面加上 \ 
                 }

@@ -34,45 +34,61 @@ class KlassController extends IndexController
 		return $this->fetch();              
 	}
 
+	// 对数据进行保存或更新
+	 private function saveKlass(Klass &$Klass, $isUpdate = false)
+	 {
+	 	 // 数据更新
+	   	 if (!$isUpdate) {
+	   	 	 $Klass->name = Request::instance()->post('name');
+	   	 }
+	     $Klass->teacher_id = Request::instance()->post('teacher_id/d');
+
+	     //更新或保存
+	     return $Klass->validate(true)->save($Klass->getData());
+	 }
+
 	// 新增班级信息页面
 	public function add()
 	{
 		try {
+			// 实例化$Klass
+			$Klass = new Klass;
+
+			// 设置默认值
+			$Klass->name = '';
+			$Klass->id = 0;
+			$Klass->teacher_id = 0;
+
+			$this->assign('Klass', $Klass);
+
 			// 获取所有的教师信息
 			$teachers = Teacher::all();
 			$this->assign('teachers', $teachers);
-			return $this->fetch();
+			return $this->fetch('edit');
+
 		} catch (\Exception $e) {
 			return '系统错误'.$e->getMessage();
 		}
 	}
 
 	// 保存新增班级信息
-	public function save()
+	public function insert()
 	{
 		$message = ''; // 提示信息
 
 		try {
-			// 实例化请求信息
-			$Request = Request::instance();
-
 			// 实例化班级并赋值
 			$Klass = new Klass();
-			$Klass->name = $Request->post('name');
-			$Klass->teacher_id = $Request->post('teacher_id/d');
-			
-			// 新增班级对象至数据表
-			$result = $Klass->validate(true)->save($Klass->getData());
 
-			// 反馈结果
-			if (false === $result) 
-			{	
+			// 新增数据
+			if (!$this->saveKlass($Klass)) {
 				// 验证未通过,发生错误
 				$message = '数据添加错误: '.$Klass->getError();
-			} else {
-				// 提示操作成功,并跳转至班级管理页面
-				return $this->success('班级'.$Klass->name.'新增成功', url('index'));
+			} else {	
+			// 提示操作成功,并跳转至班级管理页面
+			return $this->success('班级'.$Klass->name.'新增成功', url('index'));
 			}
+			
 			
 	    // 获取到ThinkPHP的内置异常时，直接向上抛出，交给ThinkPHP处理
     	} catch (\think\Exception\HttpResponseException $e) {
@@ -154,7 +170,7 @@ class KlassController extends IndexController
 			$this->assign('teachers', $teachers);
 
 			// 渲染编辑页面
-			return $this->fetch();
+			return $this->fetch('edit');
 
 		// 获取到ThinkPHP的内置异常时,直接向上抛出,交给ThinkPHP处理
 		} catch (\think\Exception\HttpResponseException $e) {
@@ -176,16 +192,10 @@ class KlassController extends IndexController
 	        // 获取传入的班级信息
 	        $Klass = Klass::get($id);
 
-
 	        if (!is_null($Klass)) {
-	            // 数据更新
-	        	$Klass->name = Request::instance()->post('name');
-	        	$Klass->teacher_id = Request::instance()->post('teacher_id/d');
-
-	        	// 更新
-	        	if (false === $Klass->validate()->save($Klass->getData())) {	// 这里使用的是validate()而不是validate(true)效果相同，为什么呢？
-	            	return $this->error('更新失败：' . $Klass->getError());
-	        	}
+	        	if (!$this->saveKlass($Klass, true)) {
+	        		return $this->error('更新失败' . $Klass->getError());
+	        	} 
 	        } else {
 	        	throw new \Exception("所更新的记录不存在", 1); // 调用PHP内置类时，需要在前面加上 \ 
 	        } 

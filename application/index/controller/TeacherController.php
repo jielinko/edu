@@ -22,6 +22,9 @@ class TeacherController extends IndexController
 			// 实例化Teacher
 			$Teacher = new Teacher; 
 
+			// 打印$Teacher至控制台
+			// trace($Teacher, 'debug');
+
 			// 按条件查询数据并调用分页
 	        $teachers = $Teacher->where('name','like','%'.$name.'%')->paginate($pageSize,false,[
 	        	'query' => [
@@ -91,7 +94,7 @@ class TeacherController extends IndexController
 	        
 	    // 新增数据
 	    if (!$this->saveTeacher($Teacher)) {
-	    	return $this->error('操作失败' . $Teacher->getError());
+	    	return $this->error('教师信息保存失败' . $Teacher->getError());
 	    }
 
 		// 提示操作成功,并跳转至教师管理页面

@@ -1,36 +1,31 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
+{extend name="edit" /} 
 
-<head>
-    <meta charset="UTF-8">
-    <title>编辑班级信息</title>
-    <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
-</head>
+{block name="title"} 
+{eq name="Klass->id" value=""}添加班级{else /}编辑班级{/eq} 
+{/block} 
 
-<body class="container">
-    <h1>编辑班级信息</h1>
-    <div class="row">
-        <div class="col-md-12">
-            <hr />
-            <form action="{:url('update')}" method="post" class="form-inline">
-                <input type="hidden" name="id" value="{$Klass->getData('id')}" />
-                <div class="form-group">
-                    <label for="name">班级名称:</label>
-                    <input type="text" name="name" id="name" class="form-control" value="{$Klass->getData('name')}" />
-                </div>
-                <div class="form-group">
-                    <label for="teacher">教师名:</label>
-                    <select name="teacher_id" class="form-control" id="teacher">
-                        {volist name="teachers" id="_Teacher"}
-                        <option value="{$_Teacher->getData('id')}" {eq name="$_Teacher->getData('id')" value="$Klass->getData('teacher_id')" } selected="selected" {/eq}>{$_Teacher->getData('name')}</option>
-                        {/volist}
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-info">更新</button>
-            </form>
-            <hr />
-        </div>
+{block name="h1"} 
+{eq name="Klass->id" value=""}添加班级{else /}编辑班级{/eq} 
+{/block} 
+
+{block name="content"} 
+{php}$action = request()->action() === 'add' ? 'insert' : 'update';{/php}
+
+<form action="{:url($action)}" method="post" class="form-inline">
+    <input type="hidden" name="id" value="{$Klass->getData('id')}" />
+    <div class="form-group">
+        <label for="name">班级名称:</label>
+        {eq name="Klass->name" value=""}
+        <input type="text" name="name" id="name" class="form-control" value="{$Klass->name}" /> {else /} {$Klass->name} {/eq}
     </div>
-</body>
-
-</html>
+    <div class="form-group">
+        <label for="teacher">教师名:</label>
+        <select name="teacher_id" class="form-control" id="teacher">
+            {volist name="teachers" id="_Teacher"}
+            <option value="{$_Teacher->getData('id')}" {eq name="$_Teacher->getData('id')" value="$Klass->getData('teacher_id')" } selected="selected" {/eq}>{$_Teacher->getData('name')}</option>
+            {/volist}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-info">保存</button>
+</form>
+{/block}

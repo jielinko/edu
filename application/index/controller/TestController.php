@@ -7,6 +7,17 @@ use think\Exception;
 
 class TestController extends Controller
 {
+     // 对数据进行保存或更新
+     private function saveKlass(Klass &$Klass)
+     {
+         // 数据更新
+         $Klass->name = Request::instance()->post('name');
+         $Klass->teacher_id = Request::instance()->post('teacher_id/d');
+
+         //更新或保存
+         return $Klass->validate(true)->save($Klass->getData());
+     }
+
 	// 执行结果: 系统发生错误 依次由两个 catch 获取.
 	public function test1()
     {
@@ -43,4 +54,6 @@ class TestController extends Controller
     	}
 
     }
+
+
 }

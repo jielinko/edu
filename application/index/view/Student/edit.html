@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
+{extend name="edit" /} 
 
-<head>
-    <meta charset="UTF-8">
-    <title>编辑学生信息</title>
-    <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
-</head>
+{block name="title"} 
+{eq name="Student->id" value=""}添加学生{else /}编辑学生{/eq} 
+{/block} 
 
-<body class="container">
-    <h1>编辑学生信息</h1>
-    <div class="row">
-        <div class="col-md-12">
-            <hr />
-            <form action="{:url('update')}" method="post" class="form-inline">
+{block name="h1"} 
+{eq name="Student->id" value=""}添加学生{else /}编辑学生{/eq} 
+{/block} 
+
+{block name="content"} 
+{php}$action = request()->action() === 'add' ? 'insert' : 'update';{/php}
+            <form action="{:url($action)}" method="post" class="form-inline">
                 <div class="form-group">
                     <label>学生姓名:</label>
                     <input type="hidden" name="id" value="{$Student->getData('id')}" />
@@ -20,7 +18,8 @@
                 </div>
                 <div class="form-group">
                     <label>学号:</label>
-                    <input type="text" name="num" class="form-control" value="{$Student->getData('num')}" />
+                    {eq name="Student->num" value=""}
+                    <input type="text" name="num" value="{$Student->num}" class="form-control" />{else /} {$Student->num}{/eq}
                 </div>
                 <div class="form-group">
                     <label>性别:</label>
@@ -32,8 +31,8 @@
                 <div class="form-group">
                     <label>班级</label>
                     <select name="klass_id" class="form-control">
-                        {volist name="Student->klass->all()" id="klass"}
-                        <option value="{$klass->id}" {eq name="klass->id" value="$Student->klass_id" }selected="selected" {/eq}>{$klass->name}</option>
+                        {volist name="klasses" id="_Klass"}
+                        <option value="{$_Klass->id}" {eq name="_Klass->id" value="$Student->klass_id" }selected="selected" {/eq}>{$_Klass->name}</option>
                         {/volist}
                     </select>
                 </div>
@@ -41,10 +40,6 @@
                     <label>邮箱:</label>
                     <input type="email" name="email" class="form-control" value="{$Student->getData('email')}" />
                 </div>
-                <button type="submit" class="btn btn-info">更新</button>
+                <button type="submit" class="btn btn-info">保存</button>
             </form>
-        </div>
-    </div>
-</body>
-
-</html>
+{/block}
